@@ -13,7 +13,7 @@ const fs = require("fs");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); 
 app.use(expressLayouts);
-app.set("layout", "./layouts/layout");
+app.set("layout", path.join(__dirname, "views/layouts/layout"))
 
 app.use(express.static("public"))
 
