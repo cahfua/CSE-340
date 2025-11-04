@@ -394,3 +394,27 @@ a:focus-visible,
     margin-bottom: 14px;
   }
 }
+
+
+/* === Contrast-only fixes ===================================== */
+.site-nav a.active {
+  color: #ffffff;
+}
+
+a,
+.card figcaption,
+.upgrades a {
+  color: #065f73;
+}
+
+.account {
+  color: #0f2530;
+}
+
+.site-footer .container {
+  color: #334155;
+}
+
+.vehicle {
+  color: #0a6b7e;
+}
