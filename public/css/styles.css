@@ -1,6 +1,396 @@
-/******* Change Box Model ***************/
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #4f5b66;
+  --brand: #08b4d4;
+  --brand-700: #0799b6;
+  --panel: #e6f5f7;
+  --nav-bg: #2f3b46;
+  --nav-link: #ffffff;
+  --nav-active: #cce9ed;
+  --card-bg: #0aa1b0;
+  --border: #d9e1e7;
+  --frame: #00b7a5;
+}
+
+/* ===== Base + Checkerboard ===== */
+* {
+  box-sizing: border-box
+}
+
+html,
+body {
+  height: 100%
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  line-height: 1.55;
+  background-image: url("/images/site/checkerboard.jpg");
+  background-repeat: repeat;
+  background-size: 140px 140px;
+}
+
+.page {
+  min-height: 100dvh;
+  max-width: 980px;
+  margin: 0 auto;
+  background: #fff;
+  border: 4px solid var(--frame);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 920px;
+  margin-inline: auto;
+  padding: 0 18px
+}
+
+h1,
+h2 {
+  font-family: Poppins, Inter, sans-serif;
+  margin: 0 0 .6rem
+}
+
+h1 {
+  font-size: 2.15rem;
+  font-weight: 700;
+  letter-spacing: .2px
+}
+
+h2 {
+  font-size: 1.55rem;
+  font-weight: 700
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block
+}
+
+a {
+  color: var(--brand);
+  text-decoration: none
+}
+
+a:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 2px
+}
+
+/* ===== Header / Nav ===== */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  border-radius: 8px 8px 0 0
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px
+}
+
+.brand {
+  font-weight: 800;
+  font-size: 1.65rem;
+  color: #1b2a34
+}
+
+.account {
+  font-size: .9rem;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: .5px
+}
+
+.site-nav {
+  background: var(--nav-bg)
+}
+
+.site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: .35rem;
+  margin: 0;
+  padding: .55rem 18px;
+  flex-wrap: wrap
+}
+
+.site-nav a {
+  display: inline-block;
+  color: var(--nav-link);
+  padding: .45rem .95rem;
+  border-radius: .35rem;
+  font-weight: 600
+}
+
+.site-nav a:hover {
+  background: rgba(255, 255, 255, .12)
+}
+
+.site-nav a.active {
+  background: #3f4b56;
+  color: var(--nav-active)
+}
+
+/* ===== Hero ===== */
+.hero {
+  padding: 12px 0 0
+}
+
+.hero .container {
+  position: relative
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 16px
+}
+
+.callout {
+  background: rgba(230, 245, 247, .55);
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, .08);
+  max-width: 420px;
+  position: relative;
+  z-index: 3;
+}
+
+.vehicle {
+  color: var(--brand);
+  font-size: 1.15rem;
+  margin: 0 0 .3rem;
+  font-weight: 800
+}
+
+.features {
+  margin: .25rem 0 1rem 1rem
+}
+
+.btn {
+  display: inline-block;
+  background: var(--brand);
+  color: #fff;
+  padding: .65rem 1rem;
+  border-radius: .45rem;
+  font-weight: 800
+}
+
+.btn:hover {
+  background: var(--brand-700)
+}
+
+/* ===== Main ===== */
+.site-main {
+  padding: 18px 0 22px
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px
+}
+
+/* ===== Upgrades ===== */
+.upgrades .cards {
+  margin: .6rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px
+}
+
+.card {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: .45rem
+}
+
+.card figure {
+  margin: 0;
+  background: var(--card-bg);
+  border: 1px solid #108c99;
+  border-radius: 6px;
+  height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden
+}
+
+.card img {
+  width: 86px;
+  height: 86px;
+  object-fit: cover
+}
+
+.card figcaption {
+  margin-top: 6px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: underline
+}
+
+/* ===== Reviews ===== */
+.reviews .bullets {
+  margin-left: 1.25rem
+}
+
+.reviews .bullets li {
+  margin-bottom: 10px;
+  font-size: 1rem
+}
+
+/* ===== Footer ===== */
+.site-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: #fff;
+  border-radius: 0 0 8px 8px
+}
+
+.site-footer .container {
+  padding: 16px;
+  color: var(--muted);
+  font-size: .9rem
+}
+
+/* ===== Desktop exact layout ===== */
+@media (min-width:900px) {
+  .hero {
+    padding-top: 10px;
+    padding-bottom: 100px;
+  }
+
+  .hero h1 {
+    white-space: nowrap;
+    margin: 6px 0 64px;
+    position: relative;
+    z-index: 4;
+    top: -80px
+  }
+
+  .hero-grid {
+    grid-template-columns: 44% 56%;
+    column-gap: 22px;
+  }
+
+  /* Move car to center */
+  .hero-art {
+    position: relative;
+    left: -150px;
+    z-index: 1;
+  }
+
+  .hero-art img {
+    width: 560px;
+    height: auto;
+    top: 30px;
+    position: relative;
+  }
+
+  /* Callout sits below header, overlapping car */
+  .callout {
+    position: absolute;
+    left: 100px;
+    top: 80px;
+    max-width: 360px;
+    background: rgba(230, 245, 247, .50);
+    z-index: 3;
+  }
+
+  .reviews {
+    margin-top: 36px
+  }
+
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    column-gap: 32px
+  }
+
+  .upgrades {
+    order: 1
+  }
+
+  .reviews {
+    order: 2
+  }
+
+  .hero::after,
+  .hero-art::after {
+    content: none !important;
+  }
+}
+
+/* ==== Mobile layout: overlay callout on the car (<= 899px) ==== */
+@media (max-width: 899px) {
+
+  .hero {
+    padding-top: 8px;
+    padding-bottom: 80px;
+  }
+
+  /* Single-column hero */
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .hero-art {
+    position: relative;
+    margin-top: 6px;
+    z-index: 1;
+  }
+
+  .hero-art img {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    height: auto;
+    position: relative;
+    left: 10%;
+  }
+
+  .callout {
+    position: absolute;
+    left: 25%;
+    transform: translateX(-50%);
+    top: 30%;
+    width: min(88%, 340px);
+    max-width: 340px;
+    background: rgba(230, 245, 247, .80);
+    border: 1px solid rgba(0, 0, 0, .08);
+    z-index: 2;
+  }
+
+  .callout .vehicle {
+    font-size: 1.05rem;
+  }
+
+  .features {
+    margin: .25rem 0 .75rem 1rem;
+  }
+
+  .btn {
+    padding: .55rem .9rem;
+  }
+
+  .hero h1 {
+    margin-bottom: 14px;
+  }
 }
