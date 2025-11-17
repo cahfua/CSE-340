@@ -38,6 +38,38 @@ app.get("/welcome", (req, res) => {
 const PORT = process.env.PORT || 5500;
 const HOST = "0.0.0.0";
 
+const errorRoute = require("./routes/errorRoute")
+app.use("/error", errorRoute)
+
+/* ******************************************
+ * 404 Error Handler - Keep this above the 500 handler
+ * ***************************************** */
+app.use(async (req, res, next) => {
+  const utilities = require("./utilities")
+  let nav = await utilities.getNav()
+  res.status(404).render("errors/error", {
+    title: "404 Not Found",
+    message: "The page you requested was not found.",
+    nav
+  })
+})
+
+/* ******************************************
+ * 500 Error Handler - Must be last
+ * ***************************************** */
+app.use(async (err, req, res, next) => {
+  console.error("SERVER ERROR:", err)
+  const utilities = require("./utilities")
+  let nav = await utilities.getNav()
+
+  res.status(err.status || 500).render("errors/error", {
+    title: "Server Error",
+    message: err.message || "Something went wrong.",
+    nav
+  })
+})
+
+
 /* ***********************
  * Log statement to confirm server operation
  * *********************** */

@@ -174,6 +174,29 @@ a:focus-visible,
   font-weight: 800
 }
 
+.vehicle-detail {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin: 2rem 0;
+}
+
+.vehicle-img {
+  width: 50%;
+  max-width: 550px;
+  border-radius: 8px;
+}
+
+.vehicle-info {
+  flex: 1;
+}
+
+.vehicle-info .price {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
 .features {
   margin: .25rem 0 1rem 1rem
 }
@@ -432,6 +455,16 @@ a:focus-visible,
   }
 }
 
+/* Mobile: stack */
+@media (max-width: 768px) {
+  .vehicle-detail {
+    flex-direction: column;
+  }
+
+  .vehicle-img {
+    width: 100%;
+  }
+}
 
 /* === Contrast-only fixes ===================================== */
 .site-nav a.active {

@@ -34,7 +34,7 @@ Util.buildClassificationGrid = async function (data) {
     data.forEach((vehicle) => {
       grid += "<li>"
       grid +=
-        '<a href="../../inv/detail/' +
+        '<a href="/inv/detail/' +
         vehicle.inv_id +
         '" title="View ' +
         vehicle.inv_make +
@@ -51,7 +51,7 @@ Util.buildClassificationGrid = async function (data) {
       grid += "<hr />"
       grid += "<h2>"
       grid +=
-        '<a href="../../inv/detail/' +
+        '<a href="/inv/detail/' +
         vehicle.inv_id +
         '" title="View ' +
         vehicle.inv_make +
@@ -76,6 +76,29 @@ Util.buildClassificationGrid = async function (data) {
       '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
+}
+
+/* **************************************
+* Build vehicle detail HTML
+* ************************************ */
+Util.buildVehicleDetail = function (data) {
+  let detail = `
+    <section class="vehicle-detail">
+      <img class="vehicle-img" src="${data.inv_image}" alt="${data.inv_make} ${data.inv_model}">
+      
+      <div class="vehicle-info">
+        <h2>${data.inv_year} ${data.inv_make} ${data.inv_model}</h2>
+
+        <p class="price">Price: $${new Intl.NumberFormat('en-US').format(data.inv_price)}</p>
+
+        <p><strong>Mileage:</strong> ${new Intl.NumberFormat('en-US').format(data.inv_miles)}</p>
+        <p><strong>Color:</strong> ${data.inv_color}</p>
+        <p><strong>Description:</strong> ${data.inv_description}</p>
+      </div>
+    </section>
+  `
+
+  return detail
 }
 
 module.exports = Util

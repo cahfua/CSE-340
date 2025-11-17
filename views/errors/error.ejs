@@ -1,0 +1,63 @@
+<% /*==========Error Page==========*/ %>
+
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+<% } %>
+
+<section class="error-page">
+    <div class="error-box">
+
+        <h2>Error</h2>
+
+        <p class="error-message">
+            <%= message %>
+        </p>
+
+        <a href="/" class="btn">Return Home</a>
+
+    </div>
+</section>
+
+<style>
+    .error-page {
+        display: flex;
+        justify-content: center;
+        padding: 3rem 1rem;
+    }
+
+    .error-box {
+        background: var(--panel, #e6f5f7);
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        border: 2px solid var(--brand, #046c84);
+    }
+
+    .error-box h2 {
+        margin-bottom: 1rem;
+        font-size: 1.6rem;
+    }
+
+    .error-message {
+        font-size: 1.1rem;
+        margin: 1rem 0 2rem;
+        color: #444;
+    }
+
+    .btn {
+        display: inline-block;
+        background: var(--brand, #046c84);
+        color: white;
+        padding: 0.65rem 1.1rem;
+        border-radius: 0.35rem;
+        font-weight: 600;
+    }
+
+    .btn:hover {
+        background: var(--brand-700, #035a6c);
+    }
+</style>
