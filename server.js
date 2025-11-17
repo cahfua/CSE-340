@@ -6,6 +6,8 @@ const app = express();
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const fs = require("fs");
+const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
 
 /* ******************************************
  * View Engine and Templates
@@ -21,9 +23,10 @@ app.use(express.static("public"))
  * Default GET route
  * ***************************************** */
 // Index route  ← # added this per assignment
-app.get("/", function (req, res) {
-  res.render("index", { title: "Home" })
-})
+app.get("/", baseController.buildHome)
+
+// Inventory routes
+app.use("/inv", inventoryRoute)
 
 app.get("/welcome", (req, res) => {
   res.send("Welcome home!")

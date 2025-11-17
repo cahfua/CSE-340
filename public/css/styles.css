@@ -202,6 +202,43 @@ a:focus-visible,
   gap: 22px
 }
 
+/* ===== Inventory ===== */
+#inv-display {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+#inv-display li {
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #fff;
+  padding: 1rem;
+}
+
+#inv-display img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#inv-display .namePrice {
+  margin-top: 0.75rem;
+}
+
+#inv-display h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+#inv-display span {
+  font-weight: 700;
+}
+
 /* ===== Upgrades ===== */
 .upgrades .cards {
   margin: .6rem 0 0;
