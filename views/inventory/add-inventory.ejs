@@ -1,0 +1,132 @@
+<% if (title) { %>
+  <h1><%= title %></h1>
+<% } %>
+
+<% if (message) { %>
+  <p class="notice"><%= message %></p>
+<% } %>
+
+<section class="form-section">
+<form action="/inv/add-vehicle" method="post" class="inv-form">
+    <div class="form-field">
+      <label for="classificationList">Classification</label>
+      <p class="hint">Choose the classification this vehicle belongs to.</p>
+      <%- classificationList %>
+    </div>
+
+    <div class="form-field">
+      <label for="inv_make">Make</label>
+      <input
+        type="text"
+        id="inv_make"
+        name="inv_make"
+        required
+        minlength="2"
+        value="<%= inv_make || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_model">Model</label>
+      <input
+        type="text"
+        id="inv_model"
+        name="inv_model"
+        required
+        minlength="1"
+        value="<%= inv_model || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_year">Year</label>
+      <input
+        type="number"
+        id="inv_year"
+        name="inv_year"
+        required
+        min="1900"
+        max="2100"
+        step="1"
+        value="<%= inv_year || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_price">Price (USD)</label>
+      <input
+        type="number"
+        id="inv_price"
+        name="inv_price"
+        required
+        min="0"
+        step="0.01"
+        value="<%= inv_price || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_miles">Mileage (miles)</label>
+      <input
+        type="number"
+        id="inv_miles"
+        name="inv_miles"
+        required
+        min="0"
+        step="1"
+        value="<%= inv_miles || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_color">Color</label>
+      <input
+        type="text"
+        id="inv_color"
+        name="inv_color"
+        required
+        value="<%= inv_color || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_image">Full-size Image Path</label>
+      <p class="hint">
+        Example: <code>/images/vehicles/no-image.png</code>
+      </p>
+      <input
+        type="text"
+        id="inv_image"
+        name="inv_image"
+        required
+        value="<%= inv_image || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_thumbnail">Thumbnail Image Path</label>
+      <p class="hint">
+        Example: <code>/images/vehicles/no-image-tn.png</code>
+      </p>
+      <input
+        type="text"
+        id="inv_thumbnail"
+        name="inv_thumbnail"
+        required
+        value="<%= inv_thumbnail || '' %>"
+      >
+    </div>
+
+    <div class="form-field">
+      <label for="inv_description">Description</label>
+      <textarea
+        id="inv_description"
+        name="inv_description"
+        required
+        rows="4"
+      ><%= inv_description || '' %></textarea>
+    </div>
+
+    <button type="submit" class="btn">Add Vehicle</button>
+  </form>
+</section>

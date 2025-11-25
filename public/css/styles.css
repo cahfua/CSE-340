@@ -488,3 +488,50 @@ a,
 .vehicle {
   color: #0a6b7e;
 }
+
+/* ===== Forms / Validation ===== */
+.form-section {
+  margin: 2rem 0;
+}
+
+.inv-form {
+  max-width: 640px;
+}
+
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.form-field .hint {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Visual feedback for client-side validation */
+.inv-form input:required:valid,
+.inv-form textarea:required:valid,
+.inv-form select:required:valid {
+  border: 2px solid #16a34a;
+}
+
+.inv-form input:required:invalid,
+.inv-form textarea:required:invalid,
+.inv-form select:required:invalid {
+  border: 2px solid #b91c1c;
+}
+
+/* Messages */
+.notice {
+  padding: 0.75rem 1rem;
+  background: #e0f2fe;
+  border: 1px solid #7dd3fc;
+  border-radius: 0.35rem;
+  margin-bottom: 1rem;
+}

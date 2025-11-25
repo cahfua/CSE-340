@@ -6,8 +6,11 @@ const app = express();
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const fs = require("fs");
+const session = require("express-session")
+
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
+const errorRoute = require("./routes/errorRoute")
 
 /* ******************************************
  * View Engine and Templates
@@ -19,6 +22,25 @@ app.set("layout", path.join(__dirname, "views/layouts/layout"))
 
 app.use(express.static("public"))
 
+app.use(express.urlencoded({ extended: true }))
+
+/* ******************************************
+ * Session Middleware (Flash Messages)
+ * ******************************************/
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "superSecretSession",
+    resave: false,
+    saveUninitialized: true,
+  })
+)
+
+app.use((req, res, next) => {
+  res.locals.message = req.session.message
+  delete req.session.message
+  next()
+})
+
 /* ******************************************
  * Default GET route
  * ***************************************** */
@@ -28,54 +50,51 @@ app.get("/", baseController.buildHome)
 // Inventory routes
 app.use("/inv", inventoryRoute)
 
+app.use("/error", errorRoute)
+
 app.get("/welcome", (req, res) => {
   res.send("Welcome home!")
 })
 
 /* ******************************************
- * Server host name and port
- * ***************************************** */
-const PORT = process.env.PORT || 5500;
-const HOST = "0.0.0.0";
-
-const errorRoute = require("./routes/errorRoute")
-app.use("/error", errorRoute)
-
-/* ******************************************
- * 404 Error Handler - Keep this above the 500 handler
- * ***************************************** */
+ * 404 Handler
+ * ******************************************/
 app.use(async (req, res, next) => {
   const utilities = require("./utilities")
   let nav = await utilities.getNav()
   res.status(404).render("errors/error", {
     title: "404 Not Found",
     message: "The page you requested was not found.",
-    nav
+    nav,
   })
 })
 
 /* ******************************************
- * 500 Error Handler - Must be last
- * ***************************************** */
+ * 500 Handler
+ * ******************************************/
 app.use(async (err, req, res, next) => {
   console.error("SERVER ERROR:", err)
   const utilities = require("./utilities")
   let nav = await utilities.getNav()
-
   res.status(err.status || 500).render("errors/error", {
     title: "Server Error",
     message: err.message || "Something went wrong.",
-    nav
+    nav,
   })
 })
 
+/* ******************************************
+ * Server host name and port
+ * ***************************************** */
+const PORT = process.env.PORT || 5500
+const HOST = "0.0.0.0"
 
-/* ***********************
- * Log statement to confirm server operation
- * *********************** */
 app.listen(PORT, HOST, () => {
   console.log(`app listening on ${HOST}:${PORT}`)
 })
 
-console.log("Views dir:", app.get("views"));
-console.log("index.ejs exists:", fs.existsSync(path.join(app.get("views"), "index.ejs")));
+console.log("Views dir:", app.get("views"))
+console.log(
+  "index.ejs exists:",
+  fs.existsSync(path.join(app.get("views"), "index.ejs"))
+)
