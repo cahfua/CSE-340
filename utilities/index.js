@@ -1,10 +1,12 @@
 const invModel = require("../models/inventory-model")
+const jwt = require("jsonwebtoken")
+
 const Util = {}
 
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
-Util.getNav = async function (req, res, next) {
+Util.getNav = async function () {
   let data = await invModel.getClassifications()
   let list = "<ul>"
   list += '<li><a href="/" title="Home page">Home</a></li>'
@@ -79,8 +81,8 @@ Util.buildClassificationGrid = async function (data) {
 }
 
 /* **************************************
-* Build vehicle detail HTML
-* ************************************ */
+ * Build vehicle detail HTML
+ * ************************************ */
 Util.buildVehicleDetail = function (data) {
   let detail = `
     <section class="vehicle-detail">
@@ -97,7 +99,6 @@ Util.buildVehicleDetail = function (data) {
       </div>
     </section>
   `
-
   return detail
 }
 
@@ -125,4 +126,52 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList
 }
 
-module.exports = Util
+/* ============ AUTH HELPERS ============ */
+
+function checkJWTToken(req, res, next) {
+  const token = req.cookies?.jwt
+  if (!token) {
+    res.locals.loggedin = false
+    return next()
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, accountData) => {
+    if (err) {
+      res.clearCookie("jwt")
+      res.locals.loggedin = false
+      return next()
+    }
+    res.locals.loggedin = true
+    res.locals.accountData = accountData
+    next()
+  })
+}
+
+function checkLogin(req, res, next) {
+  if (!res.locals.loggedin) {
+    req.session.message = "Please log in to continue."
+    return res.redirect("/account/login")
+  }
+  next()
+}
+
+function checkAccountType(req, res, next) {
+  const type = res.locals.accountData?.account_type
+  if (type === "Employee" || type === "Admin") {
+    return next()
+  }
+  req.session.message = "You do not have permission to access that area."
+  return res.redirect("/account/login")
+}
+
+/* ========= WHAT OTHER FILES IMPORT ========= */
+
+module.exports = {
+  getNav: Util.getNav,
+  buildClassificationGrid: Util.buildClassificationGrid,
+  buildVehicleDetail: Util.buildVehicleDetail,
+  buildClassificationList: Util.buildClassificationList,
+  checkJWTToken,
+  checkLogin,
+  checkAccountType,
+}

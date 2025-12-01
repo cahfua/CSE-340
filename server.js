@@ -11,6 +11,8 @@ const session = require("express-session")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
 const errorRoute = require("./routes/errorRoute")
+const cookieParser = require("cookie-parser")
+
 
 /* ******************************************
  * View Engine and Templates
@@ -23,6 +25,13 @@ app.set("layout", path.join(__dirname, "views/layouts/layout"))
 app.use(express.static("public"))
 
 app.use(express.urlencoded({ extended: true }))
+
+app.use(express.json())
+app.use(cookieParser())
+
+const utilities = require("./utilities")
+app.use(utilities.checkJWTToken)
+
 
 /* ******************************************
  * Session Middleware (Flash Messages)
@@ -55,6 +64,10 @@ app.use("/error", errorRoute)
 app.get("/welcome", (req, res) => {
   res.send("Welcome home!")
 })
+
+const accountRoute = require("./routes/accountRoute")
+app.use("/account", accountRoute)
+
 
 /* ******************************************
  * 404 Handler

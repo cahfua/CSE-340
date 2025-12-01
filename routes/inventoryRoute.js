@@ -1,30 +1,57 @@
 const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController")
+const utilities = require("../utilities")
 
-// management view
-router.get("/", invController.buildManagementView)
+// =======================
+//  ADMIN / EMPLOYEE ONLY
+// =======================
 
-// build inventory by classification view
-router.get("/type/:classificationId", invController.buildByClassificationId)
+// management view (Vehicle Management page)
+router.get(
+  "/",
+  utilities.checkAccountType,
+  invController.buildManagementView
+)
 
-// build inventory detail view
-router.get("/detail/:invId", invController.buildByInvId)
+// add classification form
+router.get(
+  "/add-classification",
+  utilities.checkAccountType,
+  invController.buildAddClassification
+)
 
-// adding a new classification
-router.get("/add-classification", invController.buildAddClassification)
+// process new classification
 router.post(
   "/add-classification",
+  utilities.checkAccountType,
   invController.validateClassification,
   invController.addClassification
 )
 
-// adding a new vehicle
-router.get("/add-vehicle", invController.buildAddInventory)
+// add vehicle form
+router.get(
+  "/add-vehicle",
+  utilities.checkAccountType,
+  invController.buildAddInventory
+)
+
+// process new vehicle
 router.post(
   "/add-vehicle",
+  utilities.checkAccountType,
   invController.validateInventory,
   invController.addInventory
 )
+
+// =======================
+//  PUBLIC ROUTES
+// =======================
+
+// build inventory by classification view (public)
+router.get("/type/:classificationId", invController.buildByClassificationId)
+
+// build inventory detail view (public)
+router.get("/detail/:invId", invController.buildByInvId)
 
 module.exports = router

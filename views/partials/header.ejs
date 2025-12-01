@@ -1,6 +1,13 @@
 <header class="site-header">
-    <div class="container">
-        <a class="brand" href="/">CSE Motors</a>
-        <a class="account" href="#" aria-label="My Account">My Account</a>
-    </div>
+    <% if (locals.loggedin && locals.accountData) { %>
+        <li>
+            Welcome
+            <a href="/account">
+                <%= accountData.account_firstname %>
+            </a>
+        </li>
+        <li><a href="/account/logout">Logout</a></li>
+        <% } else { %>
+            <li><a href="/account/login">My Account</a></li>
+            <% } %>
 </header>

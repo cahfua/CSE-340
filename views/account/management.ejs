@@ -1,0 +1,34 @@
+<h1>Account Management</h1>
+
+<% if (typeof message !== "undefined" && message) { %>
+  <div class="notice">
+    <p><%= message %></p>
+  </div>
+<% } %>
+
+<% if (typeof errors !== "undefined" && errors.length > 0) { %>
+  <div class="notice error">
+    <ul>
+      <% errors.forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<% const acct = accountData || {}; %>
+
+<h2>Welcome <%= acct.account_firstname %></h2>
+
+<p>
+  <a href="/account/update/<%= acct.account_id %>">
+    Update Account Information
+  </a>
+</p>
+
+<% if (acct.account_type === "Employee" || acct.account_type === "Admin") { %>
+  <h3>Inventory Management</h3>
+  <p>
+    <a href="/inv">Manage Inventory</a>
+  </p>
+<% } %>
