@@ -137,7 +137,7 @@ invCont.addClassification = async function (req, res, next) {
 }
 
 /* ***************************
- *  Inventory view
+ *  Add inventory view
  * ************************** */
 invCont.buildAddInventory = async function (req, res, next) {
   try {
@@ -289,6 +289,84 @@ invCont.addInventory = async function (req, res, next) {
         inv_color,
       })
     }
+  } catch (error) {
+    next(error)
+  }
+}
+
+/* ***************************
+ *  SEARCH: show form
+ * ************************** */
+invCont.buildSearch = async function (req, res, next) {
+  try {
+    let nav = await utilities.getNav()
+    res.render("./inventory/search", {
+      title: "Search Inventory",
+      nav,
+      message: res.locals.message,
+      term: "",
+      resultsGrid: "",
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/* ***************************
+ *  SEARCH: process search request
+ * ************************** */
+invCont.processSearch = async function (req, res, next) {
+  try {
+    const term = req.body.term ? req.body.term.trim() : ""
+    let nav = await utilities.getNav()
+
+    if (!term) {
+      return res.status(400).render("./inventory/search", {
+        title: "Search Inventory",
+        nav,
+        message: "Please enter a search term.",
+        term,
+        resultsGrid: "",
+      })
+    }
+
+    const results = await invModel.searchInventory(term)
+
+    let resultsGrid = ""
+    if (results.length) {
+      resultsGrid = await utilities.buildClassificationGrid(results)
+    } else {
+      resultsGrid =
+        '<p class="notice">No vehicles matched your search.</p>'
+    }
+
+    res.render("./inventory/search", {
+      title: `Search Results for "${term}"`,
+      nav,
+      message: res.locals.message,
+      term,
+      resultsGrid,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/* ***************************
+ *  ALL INVENTORY: /inv/all
+ * ************************** */
+invCont.buildAllInventory = async function (req, res, next) {
+  try {
+    const data = await invModel.getAllInventory()
+    let nav = await utilities.getNav()
+    const grid = await utilities.buildClassificationGrid(data || [])
+
+    res.render("./inventory/all-inventory", {
+      title: "All Vehicles",
+      nav,
+      grid,
+      message: res.locals.message,
+    })
   } catch (error) {
     next(error)
   }

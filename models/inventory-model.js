@@ -17,18 +17,17 @@ async function getInventoryByClassificationId(classification_id) {
   try {
     const data = await pool.query(
       `SELECT * FROM public.inventory AS i 
-      JOIN public.classification AS c 
-      ON i.classification_id = c.classification_id 
-      WHERE i.classification_id = $1`,
+       JOIN public.classification AS c 
+         ON i.classification_id = c.classification_id 
+       WHERE i.classification_id = $1`,
       [classification_id]
     )
     return data.rows
   } catch (error) {
-    console.error("getclassificationsbyid error " + error)
+    console.error("getInventoryByClassificationId error: " + error)
+    throw error
   }
 }
-
-module.exports = { getClassifications, getInventoryByClassificationId, getVehicleByInvId }
 
 /* ***************************
  *  Get vehicle by inv_id
@@ -38,13 +37,14 @@ async function getVehicleByInvId(inv_id) {
     const sql = `
       SELECT * FROM public.inventory AS i
       JOIN public.classification AS c
-      ON i.classification_id = c.classification_id
+        ON i.classification_id = c.classification_id
       WHERE i.inv_id = $1
     `
     const data = await pool.query(sql, [inv_id])
     return data.rows[0]
   } catch (error) {
     console.error("getVehicleByInvId error: " + error)
+    throw error
   }
 }
 
@@ -110,10 +110,57 @@ async function addInventory(
   }
 }
 
+/* ***************************
+ *  SEARCH inventory by term
+ *  (make, model, description, or classification name)
+ * ************************** */
+async function searchInventory(term) {
+  try {
+    const sql = `
+      SELECT i.*, c.classification_name
+      FROM public.inventory AS i
+      JOIN public.classification AS c
+        ON i.classification_id = c.classification_id
+      WHERE i.inv_make ILIKE $1
+         OR i.inv_model ILIKE $1
+         OR i.inv_description ILIKE $1
+         OR c.classification_name ILIKE $1
+      ORDER BY i.inv_make, i.inv_model
+    `
+    const data = await pool.query(sql, [`%${term}%`])
+    return data.rows
+  } catch (error) {
+    console.error("searchInventory error: " + error)
+    throw error
+  }
+}
+
+/* ***************************
+ *  Get all inventory
+ *  shows every car in the inventory as a grid
+ * ************************** */
+async function getAllInventory() {
+  try {
+    const sql = `
+      SELECT * FROM public.inventory AS i
+      JOIN public.classification AS c
+        ON i.classification_id = c.classification_id
+      ORDER BY i.inv_make, i.inv_model
+    `
+    const data = await pool.query(sql)
+    return data.rows
+  } catch (error) {
+    console.error("getAllInventory error:", error)
+    return null
+  }
+}
+
 module.exports = {
   getClassifications,
   getInventoryByClassificationId,
   getVehicleByInvId,
   addClassification,
   addInventory,
+  searchInventory,
+  getAllInventory,
 }

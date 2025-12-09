@@ -1,0 +1,22 @@
+<h1><%= title %></h1>
+
+<% if (message) { %>
+  <div class="notice"><%= message %></div>
+<% } %>
+
+<section class="inventory-search">
+  <form action="/inv/search" method="post" class="search-form">
+    <label for="term">Search by make, model, description, or classification</label>
+    <input
+      type="text"
+      id="term"
+      name="term"
+      required
+      value="<%= term || '' %>" />
+    <button type="submit">Search</button>
+  </form>
+</section>
+
+<section class="search-results">
+  <%- resultsGrid %>
+</section>

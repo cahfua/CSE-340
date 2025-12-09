@@ -44,9 +44,26 @@ router.post(
   invController.addInventory
 )
 
+// search form (admin / employee only)
+router.get(
+  "/search",
+  utilities.checkAccountType,
+  invController.buildSearch
+)
+
+// search submission
+router.post(
+  "/search",
+  utilities.checkAccountType,
+  invController.processSearch
+)
+
 // =======================
 //  PUBLIC ROUTES
 // =======================
+
+// all inventory (public)
+router.get("/all", invController.buildAllInventory)
 
 // build inventory by classification view (public)
 router.get("/type/:classificationId", invController.buildByClassificationId)
