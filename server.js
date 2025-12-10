@@ -22,7 +22,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(expressLayouts);
 app.set("layout", path.join(__dirname, "views/layouts/layout"))
 
-app.use(express.static("public"))
+const publicPath = path.join(__dirname, "public")
+app.use(express.static(publicPath))
 
 app.use(express.urlencoded({ extended: true }))
 
