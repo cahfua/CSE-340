@@ -21,7 +21,7 @@ async function buildRegister(req, res) {
   res.render("account/register", {
     title: "Register",
     nav,
-    errors: [],                 // no null
+    errors: [],
     message: getFlashMessage(req),
   })
 }
@@ -31,7 +31,7 @@ async function buildLogin(req, res) {
   res.render("account/login", {
     title: "Login",
     nav,
-    errors: [],                 // no null
+    errors: [],
     message: getFlashMessage(req),
   })
 }
@@ -50,7 +50,7 @@ async function registerAccount(req, res) {
   } = req.body
 
   try {
-    // hash password
+    // Hash password
     const hashedPassword = await bcrypt.hash(account_password, 10)
 
     const regResult = await accountModel.registerAccount(
@@ -68,7 +68,7 @@ async function registerAccount(req, res) {
       return res.status(500).render("account/register", {
         title: "Register",
         nav,
-        errors: [],              // no null
+        errors: [],
         message: "Sorry, the registration failed.",
       })
     }
@@ -77,7 +77,7 @@ async function registerAccount(req, res) {
     return res.status(500).render("account/register", {
       title: "Register",
       nav,
-      errors: [],                // no null
+      errors: [],
       message: "A server error occurred. Please try again.",
     })
   }
@@ -94,30 +94,43 @@ async function accountLogin(req, res) {
   try {
     const accountData = await accountModel.getAccountByEmail(account_email)
 
+    // No account with that email
     if (!accountData) {
       return res.status(400).render("account/login", {
         title: "Login",
         nav,
-        errors: [],              // no null
+        errors: [],
+        message: "Please check your credentials and try again.",
+      })
+    }
+
+    if (!accountData.account_password) {
+      console.error(
+        "accountLogin error: account_password is null/undefined for",
+        account_email
+      )
+      return res.status(400).render("account/login", {
+        title: "Login",
+        nav,
+        errors: [],
         message: "Please check your credentials and try again.",
       })
     }
 
     const match = await bcrypt.compare(
       account_password,
-      accountData.account_password
+      String(accountData.account_password)
     )
 
     if (!match) {
       return res.status(400).render("account/login", {
         title: "Login",
         nav,
-        errors: [],              // no null
+        errors: [],
         message: "Please check your credentials and try again.",
       })
     }
 
-    // Build JWT payload
     const payload = {
       account_id: accountData.account_id,
       account_firstname: accountData.account_firstname,
@@ -126,9 +139,12 @@ async function accountLogin(req, res) {
       account_type: accountData.account_type,
     }
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    })
+    const secret = process.env.JWT_SECRET
+    if (!secret) {
+      throw new Error("JWT_SECRET is not defined")
+    }
+
+    const token = jwt.sign(payload, secret, { expiresIn: "1h" })
 
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -142,7 +158,7 @@ async function accountLogin(req, res) {
     return res.status(500).render("account/login", {
       title: "Login",
       nav,
-      errors: [],                // no null
+      errors: [],
       message: "A server error occurred. Please try again.",
     })
   }
@@ -159,7 +175,7 @@ async function buildAccountManagement(req, res) {
     title: "Account Management",
     nav,
     accountData,
-    errors: [],                  // always an array
+    errors: [],
     message: getFlashMessage(req),
   })
 }
@@ -177,7 +193,7 @@ async function buildUpdateAccountView(req, res) {
     title: "Update Account",
     nav,
     accountData,
-    errors: [],                  // always an array
+    errors: [],
     message: getFlashMessage(req),
   })
 }
@@ -203,7 +219,6 @@ async function updateAccount(req, res) {
       return res.redirect("/account")
     }
 
-    // Refresh JWT with updated info
     const payload = {
       account_id: updatedAccount.account_id,
       account_firstname: updatedAccount.account_firstname,
@@ -212,9 +227,12 @@ async function updateAccount(req, res) {
       account_type: updatedAccount.account_type,
     }
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    })
+    const secret = process.env.JWT_SECRET
+    if (!secret) {
+      throw new Error("JWT_SECRET is not defined")
+    }
+
+    const token = jwt.sign(payload, secret, { expiresIn: "1h" })
 
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -236,7 +254,7 @@ async function updateAccount(req, res) {
         account_lastname,
         account_email,
       },
-      errors: [],                // array here too
+      errors: [],
       message: "A server error occurred. Please try again.",
     })
   }
